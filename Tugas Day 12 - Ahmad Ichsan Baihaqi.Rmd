@@ -1,0 +1,102 @@
+**Homework Day 12**
+
+**Author: Ahmad Ichsan Baihaqi**
+
+**Email: ahmadichsanbaihaqi@gmail.com**
+
+We will use the Ames Housing dataset for the assignment.
+
+Dataset: https://www.kaggle.com/c/house-prices-advanced-regression-techniques/data
+
+```{r}
+library(tidyverse)
+
+ames <- read_csv('train.csv')
+```
+
+```{r}
+glimpse(ames)
+```
+
+Gain & visualize 4 insights from the Ames housing dataset
+
+```{r}
+library(tidyverse)
+```
+
+
+1. Count of one categorical feature
+```{r}
+# View(summary(ames))
+
+# ames %>%
+#   distinct(MSZoning)
+
+ames %>%
+  count(MSZoning) %>%
+  ggplot(aes(x = reorder(MSZoning, n), y = n)) +
+  geom_bar(aes(fill = reorder(MSZoning, n)), stat = 'identity') +
+  scale_fill_brewer("MSZoning", palette = "Pastel1") +
+  geom_label(aes(label = n), vjust = -0.2) +
+  ylim(0, 1200) +
+  xlab("MSZoning") +
+  ylab("Frequency") +
+  ggtitle("MSZoning Occurence") +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    panel.background = element_rect(fill="NA"),
+    panel.grid.major = element_line(colour = "gray", linetype = "dashed"),
+  )
+```
+
+
+2. Distribution of one numeric feature
+```{r}
+ames %>%
+  ggplot(aes(x = GarageArea)) +
+  geom_histogram(aes(y=..density..), binwidth = 80) +
+  geom_density(
+    fill = "#69b3a2",
+    color = "#e9ecef",
+    alpha = 0.8
+  ) +
+  ggtitle("GarageArea Distribution") +
+  xlab("GarageArea (Size of garage in square feet)") +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    panel.background = element_rect(fill = "NA"),
+    panel.grid.major = element_line(colour = "gray", linetype = "dashed"),
+  )
+```
+
+3. Categorical-numeric
+```{r}
+ames %>%
+  ggplot(aes(x = MSZoning, y = GarageArea)) +
+  geom_boxplot() +
+  ggtitle("Correlation between GarageArea and MSZoning") +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    panel.background = element_rect(fill = "NA"),
+    panel.grid.major = element_line(colour = "gray", linetype = "dashed"),
+  ) +
+  ylab("GarageArea (Size of garage in square feet)") +
+  stat_summary(fun=mean, geom="point", shape=5, size=4)
+```
+
+
+4. Numeric-numeric
+```{r}
+ames %>%
+  # filter(GarageArea > 500) %>%
+  ggplot(aes(x = SalePrice, y = GarageArea, shape = MSZoning)) +
+  geom_point(aes(colour = MSZoning)) +
+  ggtitle("Correlation between GarageArea and SalePrice") +
+  ylab("GarageArea (Size of garage in square feet)") +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    panel.background = element_rect(fill = "NA"),
+    panel.grid.major = element_line(colour = "gray", linetype = "dashed"),
+  )
+```
+
