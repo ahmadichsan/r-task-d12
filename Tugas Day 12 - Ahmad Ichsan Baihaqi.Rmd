@@ -20,11 +20,6 @@ glimpse(ames)
 
 Gain & visualize 4 insights from the Ames housing dataset
 
-```{r}
-library(tidyverse)
-```
-
-
 1. Count of one categorical feature
 ```{r}
 # View(summary(ames))
